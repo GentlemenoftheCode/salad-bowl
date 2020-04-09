@@ -1,11 +1,8 @@
-import { RESET_GAME, UPDATE_GAME } from 'actions/game';
+import { RESET_GAME, UPDATE_GAME } from 'redux/actions/game';
 
 const initialState = {
   state: 'new',
-  playersRoles: {},
-  location: '',
-  prevLocation: '',
-  spies: [],
+  // players: {},
   timerRunning: false,
 };
 

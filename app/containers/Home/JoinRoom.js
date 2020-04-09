@@ -3,10 +3,9 @@ import { css } from 'emotion';
 import { useHistory } from 'react-router-dom';
 import { Container, Col, Row, Input, Button, Form } from 'reactstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { createRoomAction } from '../../redux/actions/room';
-import Spinner from '../../components/Spinner/Spinner';
+import { joinRoomAction } from 'redux/actions/room';
 
-const CreateRoom = () => {
+const JoinRoom = () => {
   const dispatch = useDispatch();
   const rootState = useSelector((state) => state);
   const roomState = useSelector((state) => state.room);
@@ -14,35 +13,31 @@ const CreateRoom = () => {
 
   // Caching last renders active & joining props
   const [activeRoom, setActiveRoom] = useState(roomState.active);
-  const [creatingRoom, setCreatingRoom] = useState(roomState.creating);
-  useEffect(() => {
-    if (
-      !activeRoom &&
-      roomState.active &&
-      creatingRoom &&
-      !roomState.creating
-    ) {
-      history.push(`/rooms/${roomState.id}`);
-    }
-    setActiveRoom(roomState.active);
-    setCreatingRoom(roomState.creating);
-  }, [
-    activeRoom,
-    setActiveRoom,
-    creatingRoom,
-    setCreatingRoom,
-    roomState,
-    history,
-  ]);
+  const [joiningRoom, setJoiningRoom] = useState(roomState.joining);
 
   // Local state for input
   const [name, onNameUpdate] = useState(rootState.root.userName || '');
-  // Function for going to the created room
+  // TODO: Force this to always be upper cased (room id)
+  const [room, onRoomUpdate] = useState(roomState.joinRoomId);
+  useEffect(() => {
+    if (!activeRoom && roomState.active && joiningRoom && !roomState.joining) {
+      history.push(`/rooms/${room}`);
+    }
+    setActiveRoom(roomState.active);
+    setJoiningRoom(roomState.joining);
+  }, [
+    activeRoom,
+    setActiveRoom,
+    joiningRoom,
+    setJoiningRoom,
+    roomState,
+    history,
+  ]);
   return (
     <Container className={styles.container}>
       <Form>
         <Row className={styles.item}>
-          <h5>Create a room</h5>
+          <h5>Join a room</h5>
         </Row>
         <Row className={styles.item}>
           <Input
@@ -54,16 +49,23 @@ const CreateRoom = () => {
           />
         </Row>
         <Row className={styles.item}>
+          <Input
+            type="text"
+            value={room}
+            name="room_input"
+            placeholder="Room ID"
+            onChange={(e) => onRoomUpdate(e.target.value)}
+          />
+        </Row>
+        <Row className={styles.item}>
           <Col>
             <Button
               disabled={!name}
               size="100px"
               color="primary"
-              onClick={() =>
-                dispatch(createRoomAction(rootState.room.id, name))
-              }
+              onClick={() => dispatch(joinRoomAction(room, name))}
             >
-              Create
+              Join
             </Button>
           </Col>
         </Row>
@@ -81,4 +83,4 @@ const styles = {
   }),
 };
 
-export default CreateRoom;
+export default JoinRoom;

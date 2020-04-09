@@ -14,7 +14,7 @@ import {
   SELECT_LOCATION,
   SET_TIME,
   UPDATE_PLAYER,
-} from 'actions/config';
+} from 'redux/actions/config';
 
 const defaultSelectedLocations = Object.entries(DEFAULT_LOCATIONS)
   .filter(([key, value]) => value === 1)
@@ -24,12 +24,12 @@ const defaultSelectedLocations = Object.entries(DEFAULT_LOCATIONS)
   }, {});
 
 const initialState = {
-  selectedLocations: defaultSelectedLocations,
-  customLocations: {},
-  roomId: roomIdGenerator(),
-  players: ['P1'],
-  time: 480,
-  spyCount: 1,
+  // selectedLocations: defaultSelectedLocations,
+  // customLocations: {},
+  // roomId: roomIdGenerator(),
+  // players: ['P1'],
+  // time: 480,
+  // spyCount: 1,
 };
 
 export default (state = initialState, action) => {
